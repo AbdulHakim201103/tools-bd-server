@@ -45,6 +45,7 @@ async function run() {
       res.send(tools);
     });
 
+    
     app.get("/tools/:id", async (req, res) => {
       const id = req.params.id;
       console.log(id);
@@ -52,7 +53,8 @@ async function run() {
       const tools = await toolCollection.findOne(query);
       res.send(tools);
     });
-
+    
+    
     app.put("/user/:email", async (req, res) => {
       const email = req.params.email;
       const user = req.body;
@@ -66,6 +68,11 @@ async function run() {
         expiresIn: "1d",
       });
       res.send({ result, token });
+    });
+    
+    app.get("/user", verifyJWT, async (req, res) => {
+      const users = await userCollection.find().toArray();
+      res.send(users);
     });
 
     app.post("/orders", async (req, res) => {
