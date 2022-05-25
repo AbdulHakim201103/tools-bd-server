@@ -45,13 +45,21 @@ async function run() {
       res.send(tools);
     });
 
+    app.delete("/tools/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const query = { _id: ObjectId(id) };
+      const result = await toolCollection.deleteOne(query);
+      res.send(result);
+    });
+
     app.post("/product", async (req, res) => {
       const product = req.body.data;
       const result = await toolCollection.insertOne(product);
       res.send(result);
     });
 
-    app.get("/tools/:id", async (req, res) => {
+    app.get("/tools/:id", verifyJWT,async (req, res) => {
       const id = req.params.id;
       console.log(id);
       const query = { _id: ObjectId(id) };
