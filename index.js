@@ -39,6 +39,7 @@ async function run() {
     const orderCollection = client.db("tools-bd").collection("orders");
     const userCollection = client.db("tools-bd").collection("users");
     const reviewCollection = client.db("tools-bd").collection("reviews");
+    const paymentCollection = client.db("tools-bd").collection("payments");
 
     app.get("/tools", async (req, res) => {
       const query = {};
@@ -141,6 +142,21 @@ async function run() {
       const result = await orderCollection.insertOne(order);
       res.send(result);
     });
+
+    app.patch('/orders/:id',verifyJWT,async(req, res)=>{
+      const id = req.params.id;
+      const payment = req.body;
+      const filter = {_id:ObjectId(id)};
+      const updateDoc = {
+        $set:{
+          paid: true,
+          transactionId: payment.transactionId,
+        }
+      };
+      const result = await paymentCollection.insertOne(payment);
+      const updatedOrders = await orderCollection.updateOne(filter, updateDoc);
+      res.send(updateDoc);
+    })
 
     app.get("/orders", verifyJWT, async (req, res) => {
       const customerEmail = req.query.customerEmail;
