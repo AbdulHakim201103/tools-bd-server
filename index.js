@@ -145,7 +145,6 @@ async function run() {
       const id =req.params.id;
       const query = {_id: ObjectId(id)}
       const order = await orderCollection.findOne(query);
-      console.log(order);
       res.send(order);
     })
 
