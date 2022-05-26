@@ -37,12 +37,19 @@ async function run() {
     const toolCollection = client.db("tools-bd").collection("tools");
     const orderCollection = client.db("tools-bd").collection("orders");
     const userCollection = client.db("tools-bd").collection("users");
+    const reviewCollection = client.db("tools-bd").collection("reviews");
 
     app.get("/tools", async (req, res) => {
       const query = {};
       const cursor = toolCollection.find(query);
       const tools = await cursor.toArray();
       res.send(tools);
+    });
+    app.get("/reviews", async (req, res) => {
+      const query = {};
+      const cursor = reviewCollection.find(query);
+      const reviews = await cursor.toArray();
+      res.send(reviews);
     });
 
     app.delete("/tools/:id", async (req, res) => {
@@ -56,6 +63,11 @@ async function run() {
     app.post("/product", async (req, res) => {
       const product = req.body.data;
       const result = await toolCollection.insertOne(product);
+      res.send(result);
+    });
+    app.post("/review", async (req, res) => {
+      const review = req.body.data;
+      const result = await reviewCollection.insertOne(review);
       res.send(result);
     });
 
