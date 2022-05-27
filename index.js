@@ -175,6 +175,25 @@ async function run() {
       res.send(updateDoc);
     });
 
+    app.patch('/ordersDeliver/:id',verifyJWT,async(req, res)=>{
+      const id =req.params.id;
+      const payment = req.body;
+      const filter = {_id: ObjectId(id)};
+      const updateDoc = {
+        $set: {
+          deliver: true,
+        },
+      };
+      const result = await paymentCollection.insertOne(payment);
+      const updatedOrder = await orderCollection.updateOne(filter,updateDoc);
+      res.send(updatedOrder);
+    })
+
+    app.get('/allorder',verifyJWT,async(req, res)=>{
+      const result=await orderCollection.find().toArray();
+      res.send(result);
+    })
+
     app.get("/orders", verifyJWT, async (req, res) => {
       const customerEmail = req.query.customerEmail;
       const decodeEmail = req.decoded.email;
