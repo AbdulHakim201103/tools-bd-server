@@ -87,7 +87,6 @@ async function run() {
 
     app.get("/tools/:id", verifyJWT, async (req, res) => {
       const id = req.params.id;
-      console.log(id);
       const query = { _id: ObjectId(id) };
       const tools = await toolCollection.findOne(query);
       res.send(tools);
@@ -158,7 +157,7 @@ async function run() {
       const order = req.body;
       const result = await orderCollection.insertOne(order);
       res.send(result);
-    });
+    }); 
 
     app.patch("/orders/:id", verifyJWT, async (req, res) => {
       const id = req.params.id;
